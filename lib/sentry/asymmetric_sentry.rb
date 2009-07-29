@@ -20,7 +20,8 @@ module Sentry
   
     def encrypt(data)
       raise NoPublicKeyError unless public?
-      public_rsa.public_encrypt(data)
+      rsa = public_rsa
+      rsa.public_encrypt(data)
     end
   
     def encrypt_to_base64(data)
@@ -29,7 +30,8 @@ module Sentry
   
     def decrypt(data, key = nil)
       raise NoPrivateKeyError unless private?
-      private_rsa(key).private_decrypt(data)
+      rsa = private_rsa(key)
+      rsa.private_decrypt(data)
     end
   
     def decrypt_from_base64(data, key = nil)

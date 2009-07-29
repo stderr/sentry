@@ -34,6 +34,7 @@ module Sentry
   end
   class NoPrivateKeyError < StandardError
   end
+  mattr_accessor :default_key
 end
 
 begin

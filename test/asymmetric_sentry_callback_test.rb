@@ -19,6 +19,40 @@ class AsymmetricSentryCallbackTest < ActiveSupport::TestCase
     Sentry::SymmetricSentry.default_key = @key
   end
 
+  def teardown
+    super
+    Sentry.default_key = nil
+  end
+
+  def test_encryption_should_use_default_key_when_present
+    use_encrypted_keys
+
+    assert_nil users(:user_2).creditcard
+    Sentry.default_key = @key
+
+    assert_equal @orig, users(:user_2).creditcard
+  end
+
+  def test_encryption_with_random_padding
+    # system works with unsaved record
+    u = User.new :login => 'jones'
+    u.creditcard = @orig
+    assert_equal @orig, u.creditcard
+    u.save!
+
+    # reload after save and check the decrypt works
+    u = User.find(u.id)
+    assert_equal @orig, u.creditcard
+    original_crypttext = u.crypted_creditcard
+
+    # set to same plaintext
+    u.creditcard = @orig
+    u.save!
+    
+    # expect different crypttext (due to random padding) 
+    assert_not_equal original_crypttext, u.crypted_creditcard
+  end
+
   def test_should_encrypt_creditcard
     u = User.create :login => 'jones'
     u.creditcard = @orig

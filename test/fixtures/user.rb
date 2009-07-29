@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   #define_read_methods
-  generates_crypted :creditcard, :mode => :asymmetric
+  asymmetrically_encrypts :creditcard
   
   #def self.validates_password
   #  validates_presence_of :password

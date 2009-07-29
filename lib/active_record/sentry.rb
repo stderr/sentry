@@ -31,12 +31,11 @@ module ActiveRecord # :nodoc:
 
           define_method("#{attr_name}_with_decryption") do |*optional|
             begin
-              return decrypted_values[attr_name] unless decrypted_values[attr_name].nil?
               crypted_value = self.send("#{attr_name}_without_decryption")
               return nil if crypted_value.nil?
-              key = optional.shift || (options[:key].is_a?(Proc) ? options[:key].call : options[:key])
-              decrypted_values[attr_name] = ::Sentry::AsymmetricSentry.decrypt_from_base64(crypted_value, key)
-              return decrypted_values[attr_name]
+              key = optional.shift || (options[:key].is_a?(Proc) ? options[:key].call : options[:key]) || ::Sentry.default_key
+              decrypted_value = ::Sentry::AsymmetricSentry.decrypt_from_base64(crypted_value, key)
+              return decrypted_value[8,decrypted_value.length-8]
             rescue
               nil
             end
@@ -47,22 +46,17 @@ module ActiveRecord # :nodoc:
           alias_method "#{attr_name}_before_type_cast", "#{attr_name}_with_decryption"
 
           define_method("#{attr_name}_with_encryption=") do |value|
-            decrypted_values[attr_name] = value
-            self.send("#{attr_name}_without_encryption=", ::Sentry::SymmetricSentry.encrypt_to_base64(decrypted_values[attr_name]))
+            padded_value = ActiveRecord::Sentry.rand_string + value
+            encrypted_value = ::Sentry::AsymmetricSentry.encrypt_to_base64(padded_value)
+            self.send("#{attr_name}_without_encryption=", encrypted_value)
             nil
           end
 
           alias_method_chain "#{attr_name}=", :encryption
-          #define_method("crypted_#{attr_name}") do
-          #  self.attributes[attr_name.to_s]
-          #end
-          #
-          private
-          define_method(:decrypted_values) do
-            @decrypted_values ||= {}
-          end
         end
+
       end
+      private
 
       #def symmetrically_encrypts(attr_name)
       #  temp_sentry = ::Sentry::SymmetricSentryCallback.new(attr_name)
@@ -89,6 +83,14 @@ module ActiveRecord # :nodoc:
       #    @decrypted_values ||= {}
       #  end
       #end
+    end
+
+    @@CHARS = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
+
+    def self.rand_string(length=8)
+      s=''
+      length.times{ s << @@CHARS[rand(@@CHARS.length)] }
+      s
     end
   end
 end

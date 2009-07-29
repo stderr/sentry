@@ -2,9 +2,8 @@ user_1:
   id: 1
   login: bob
   password: "0XlmUuNpE2k=\n"
-  creditcard: "vYfMxtVB8ezXmQKSNqTC9sPgi8TbsYRxWd7DVbpprzyuEdZ7gftJ/0IXsbXm\nXCU08bTAl0uEFm7dau+eJMXEJg==\n"
+  creditcard: "n0DW3do8BTv5caPgR52CVtZJ4IXh8Fmkpt7k2QnHaxIx63I9ILG+GKKzXuIM\nohtHRSnzcw3gk1gkeDpYml9CoQ==\n"  # "sentry" with 8 characters of prepadding
 user_2:
   id: 2
   login: fred
-  creditcard: "q2obYAITmK93ylzVS01mJx1jSlnmylMX15nFpb4uKesVgnqvtzBRHZ/SK+Nm\nEzceIoAcJc3DHosVa4VUE/aK/A==\n"
-  
+  creditcard: "MiIZuZmc7znWzqZuPWYPVATXeJUrfxCNyVYibefs2hfvpna7Godk6RWILXfi\nqRRU0WehLLo1Mq5EuMTTnPi09A==\n"  # "sentry" with 8 different characters of prepadding
