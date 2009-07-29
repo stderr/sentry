@@ -13,6 +13,6 @@ postgresql:
 mysql:
   :adapter: mysql
   :host: localhost
-  :username: rails
-  :password:
+  :username: root
+  :password: password
   :database: sentry_plugin_test

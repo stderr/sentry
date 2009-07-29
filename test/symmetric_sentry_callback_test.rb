@@ -1,10 +1,11 @@
 require 'abstract_unit'
 require 'fixtures/user'
 
-class SymmetricSentryCallbackTest < Test::Unit::TestCase
+class SymmetricSentryCallbackTest < ActiveSupport::TestCase
   fixtures :users
   
   def setup
+    super    
     @str = 'sentry'
     Sentry::SymmetricSentry.default_key = @key = 'secret'
     @encrypted = "0XlmUuNpE2k=\n"

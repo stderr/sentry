@@ -1,10 +1,11 @@
 require 'abstract_unit'
 require 'fixtures/user'
 
-class AsymmetricSentryCallbackTest < Test::Unit::TestCase
+class AsymmetricSentryCallbackTest < ActiveSupport::TestCase
   fixtures :users
 
   def setup
+    super
     @str = 'sentry'
     @key = 'secret'
     @public_key_file = File.dirname(__FILE__) + '/keys/public'
