@@ -176,3 +176,17 @@ task :rubyforge_upload => :package do
     end
   end
 end
+
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gemspec|
+    gemspec.name = "sentry"
+    gemspec.summary = "Asymmetric encryption of active record fields"
+    gemspec.description = "Asymmetric encryption of active record fields"
+    gemspec.email = "commoncode@pivotallabs.com"
+    gemspec.homepage = "http://github.com/pivotal/sentry"
+    gemspec.authors = ["John Pelly", "David Stevenson"]
+  end
+rescue LoadError
+  puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
+end
