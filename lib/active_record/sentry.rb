@@ -46,8 +46,7 @@ module ActiveRecord # :nodoc:
           alias_method "#{attr_name}_before_type_cast", "#{attr_name}_with_decryption"
 
           define_method("#{attr_name}_with_encryption=") do |value|
-            padded_value = ActiveRecord::Sentry.rand_string + value
-            encrypted_value = ::Sentry::AsymmetricSentry.encrypt_to_base64(padded_value)
+            encrypted_value = self.class.encrypt_for_sentry(value)
             self.send("#{attr_name}_without_encryption=", encrypted_value)
             nil
           end
@@ -56,6 +55,12 @@ module ActiveRecord # :nodoc:
         end
 
       end
+
+      def encrypt_for_sentry(string)
+        padded_value = ActiveRecord::Sentry.rand_string + string
+        encrypted_value = ::Sentry::AsymmetricSentry.encrypt_to_base64(padded_value)
+      end
+
       private
 
       #def symmetrically_encrypts(attr_name)

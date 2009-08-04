@@ -33,6 +33,10 @@ class AsymmetricSentryCallbackTest < ActiveSupport::TestCase
     assert_equal @orig, users(:user_2).creditcard
   end
 
+  def test_encrypt_for_sentry
+    assert_not_nil User.encrypt_for_sentry("hello")
+  end
+
   def test_encryption_with_random_padding
     # system works with unsaved record
     u = User.new :login => 'jones'
