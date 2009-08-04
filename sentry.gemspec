@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sentry}
-  s.version = "0.4.2"
+  s.version = "0.4.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["John Pelly", "David Stevenson"]
-  s.date = %q{2009-07-30}
+  s.date = %q{2009-08-04}
   s.description = %q{Asymmetric encryption of active record fields}
   s.email = %q{commoncode@pivotallabs.com}
   s.extra_rdoc_files = [
@@ -46,10 +46,11 @@ Gem::Specification.new do |s|
      "test/symmetric_sentry_test.rb",
      "test/tests.rb"
   ]
+  s.has_rdoc = true
   s.homepage = %q{http://github.com/pivotal/sentry}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.1}
   s.summary = %q{Asymmetric encryption of active record fields}
   s.test_files = [
     "test/abstract_unit.rb",
@@ -65,7 +66,7 @@ Gem::Specification.new do |s|
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 3
+    s.specification_version = 2
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
     else

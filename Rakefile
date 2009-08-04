@@ -22,7 +22,7 @@ Rake::TestTask.new("test") do |t|
   t.verbose = true
 end
 
-load 'tasks/sentry.rake'
+#load 'tasks/sentry.rake'
 
 Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'doc'
