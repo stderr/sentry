@@ -21,7 +21,41 @@ module Sentry
     def encrypt(data)
       raise NoPublicKeyError unless public?
       rsa = public_rsa
-      rsa.public_encrypt(data)
+      return rsa.public_encrypt(data)
+    end
+
+    def decrypt_large_from_base64(data, key=nil)
+      padding_length = data[0]
+      chunk_length = public_rsa.max_encryptable_length + 11 # 11 is magic padding for RSA encoding
+      data = Base64.decode64(data[1,data.length])
+      return (0...data.length).step(chunk_length).inject("") { |accum, idx| accum + decrypt_with_padding(data.slice(idx, chunk_length), padding_length, key)}
+    end
+
+    def chunk_size(padding_length)
+      return public_rsa.max_encryptable_length - padding_length
+    end
+    
+    def encrypt_large_to_base64(data)
+      padding_length = 8
+      chunk_length = chunk_size(padding_length)
+      return padding_length.chr + Base64.encode64( (0...data.length).step(chunk_length).inject("") {|accum, idx| accum + encrypt_with_padding( data.slice(idx, chunk_length), padding_length)} )
+    end
+
+    def decrypt_with_padding(data, padding_length, key=nil)
+      decrypted = decrypt(data, key)
+      return decrypted[0, decrypted.length - padding_length]
+    end
+
+    def encrypt_with_padding(data, padding_length)
+      encrypt(data + rand_string(padding_length))
+    end
+
+    @@CHARS = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
+
+    def rand_string(length=8)
+      s=''
+      length.times{ s << @@CHARS[rand(@@CHARS.length)] }
+      s
     end
   
     def encrypt_to_base64(data)
@@ -31,7 +65,7 @@ module Sentry
     def decrypt(data, key = nil)
       raise NoPrivateKeyError unless private?
       rsa = private_rsa(key)
-      rsa.private_decrypt(data)
+      return rsa.private_decrypt(data)
     end
   
     def decrypt_from_base64(data, key = nil)

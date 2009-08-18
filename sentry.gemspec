@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sentry}
-  s.version = "0.4.4"
+  s.version = "0.5.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["John Pelly", "David Stevenson"]
@@ -43,6 +43,7 @@ Gem::Specification.new do |s|
      "test/keys/encrypted_public",
      "test/keys/private",
      "test/keys/public",
+     "test/rsa_key_test.rb",
      "test/schema.rb",
      "test/sha_sentry_test.rb",
      "test/symmetric_sentry_callback_test.rb",
@@ -59,6 +60,7 @@ Gem::Specification.new do |s|
      "test/asymmetric_sentry_callback_test.rb",
      "test/asymmetric_sentry_test.rb",
      "test/fixtures/user.rb",
+     "test/rsa_key_test.rb",
      "test/schema.rb",
      "test/sha_sentry_test.rb",
      "test/symmetric_sentry_callback_test.rb",

@@ -45,3 +45,27 @@ begin
 rescue NameError
   nil
 end
+
+class OpenSSL::PKey::RSA
+  def max_encryptable_length
+    @max_encryption_length ||= calc_max_encrypted_length
+  end
+
+  private
+
+  def calc_max_encrypted_length
+    upper_bound = 4*1024
+    test_length = upper_bound / 2
+    while test_length != (upper_bound - 1)
+      probe = "a" * test_length
+      begin
+        self.public_encrypt(probe)
+        test_length = test_length + ((upper_bound - test_length) / 2)
+      rescue Exception => e
+        upper_bound = test_length
+        test_length = test_length / 2
+      end
+    end
+    return test_length
+  end
+end
