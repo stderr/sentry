@@ -57,6 +57,7 @@ module ActiveRecord # :nodoc:
       end
 
       def encrypt_for_sentry(string)
+        return nil if string.nil?
         padded_value = ActiveRecord::Sentry.rand_string + string
         encrypted_value = ::Sentry::AsymmetricSentry.encrypt_to_base64(padded_value)
       end

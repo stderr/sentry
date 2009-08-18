@@ -57,6 +57,14 @@ class AsymmetricSentryCallbackTest < ActiveSupport::TestCase
     assert_not_equal original_crypttext, u.crypted_creditcard
   end
 
+  def test_should_handle_nils
+    u = User.create :login => 'john'
+    u.creditcard = nil
+    assert u.save
+    assert u.crypted_creditcard.nil?
+    assert u.creditcard.nil?
+  end
+
   def test_should_encrypt_creditcard
     u = User.create :login => 'jones'
     u.creditcard = @orig
