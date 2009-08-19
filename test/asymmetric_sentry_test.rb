@@ -2,6 +2,8 @@ require 'abstract_unit'
 
 class AsymmetricSentryTest < Test::Unit::TestCase
   def setup
+    Sentry::AsymmetricSentry.default_public_key_file = nil
+    Sentry::AsymmetricSentry.default_private_key_file = nil
     @str = 'sentry'
     @key = 'secret'
     @public_key_file = File.dirname(__FILE__) + '/keys/public'
@@ -13,8 +15,6 @@ class AsymmetricSentryTest < Test::Unit::TestCase
     @orig = 'sentry'
     @data = "vYfMxtVB8ezXmQKSNqTC9sPgi8TbsYRxWd7DVbpprzyuEdZ7gftJ/0IXsbXm\nXCU08bTAl0uEFm7dau+eJMXEJg==\n"
     @encrypted_data = "q2obYAITmK93ylzVS01mJx1jSlnmylMX15nFpb4uKesVgnqvtzBRHZ/SK+Nm\nEzceIoAcJc3DHosVa4VUE/aK/A==\n"
-    Sentry::AsymmetricSentry.default_public_key_file = nil
-    Sentry::AsymmetricSentry.default_private_key_file = nil
   end
 
   def test_should_decrypt_files
@@ -60,13 +60,6 @@ class AsymmetricSentryTest < Test::Unit::TestCase
   def test_should_decrypt_files_with_default_key_using_class_method
     set_default_key_files @public_key_file, @private_key_file
     assert_equal @orig, Sentry::AsymmetricSentry.decrypt_from_base64(@data)
-  end
-
-  def test_foo
-    puts "^^^^^^^"
-    puts `ruby -v`
-    puts (1...20).step(3).inspect
-
   end
 
   def test_should_decrypt_files_with_default_encrypted_key_using_class_method

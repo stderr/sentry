@@ -32,11 +32,12 @@ module ActiveRecord # :nodoc:
           define_method("#{attr_name}_with_decryption") do |*optional|
             begin
               crypted_value = self.send("#{attr_name}_without_decryption")
+              #puts "crypted value: #{crypted_value}"
               return nil if crypted_value.nil?
               key = optional.shift || (options[:key].is_a?(Proc) ? options[:key].call : options[:key]) || ::Sentry.default_key
-              decrypted_value = ::Sentry::AsymmetricSentry.decrypt_from_base64(crypted_value, key)
-              return decrypted_value[8,decrypted_value.length-8]
-            rescue
+              decrypted_value = ::Sentry::AsymmetricSentry.decrypt_large_from_base64(crypted_value, key)
+              return decrypted_value
+            rescue Exception => e
               nil
             end
           end
@@ -58,8 +59,7 @@ module ActiveRecord # :nodoc:
 
       def encrypt_for_sentry(string)
         return nil if string.nil?
-        padded_value = ActiveRecord::Sentry.rand_string + string
-        encrypted_value = ::Sentry::AsymmetricSentry.encrypt_to_base64(padded_value)
+        return ::Sentry::AsymmetricSentry.encrypt_large_to_base64(string)
       end
 
       private

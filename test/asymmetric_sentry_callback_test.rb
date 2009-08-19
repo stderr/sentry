@@ -98,6 +98,10 @@ class AsymmetricSentryCallbackTest < ActiveSupport::TestCase
     assert_nil users(:user_2).creditcard('other secret')
   end
 
+  def test_do_encryption
+    use_encrypted_keys
+  end
+
   def test_should_encrypt_encrypted_creditcard
     use_encrypted_keys
     u = User.create :login => 'jones'

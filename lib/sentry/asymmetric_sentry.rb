@@ -13,8 +13,8 @@ module Sentry
     # * <tt>:symmetric_algorithm</tt> - algorithm to use for SymmetricSentry
     def initialize(options = {})
       @public_key = @private_key = nil
-      private_key_file = options[:private_key_file]
-      public_key_file  = options[:public_key_file] || @@default_public_key_file
+      self.private_key_file = options[:private_key_file]
+      self.public_key_file  = options[:public_key_file] || @@default_public_key_file
       @symmetric_algorithm = options[:symmetric_algorithm] || @@default_symmetric_algorithm
     end
   
@@ -25,9 +25,10 @@ module Sentry
     end
 
     def decrypt_large_from_base64(data, key=nil)
-      padding_length = data[0]
       chunk_length = public_rsa.max_encryptable_length + 11 # 11 is magic padding for RSA encoding
-      data = Base64.decode64(data[1,data.length])
+      b64_decoded = Base64.decode64(data)
+      padding_length = b64_decoded[0]
+      data = b64_decoded[1, data.length]
       return (0...data.length).step(chunk_length).inject("") { |accum, idx| accum + decrypt_with_padding(data.slice(idx, chunk_length), padding_length, key)}
     end
 
@@ -38,7 +39,7 @@ module Sentry
     def encrypt_large_to_base64(data)
       padding_length = 8
       chunk_length = chunk_size(padding_length)
-      return padding_length.chr + Base64.encode64( (0...data.length).step(chunk_length).inject("") {|accum, idx| accum + encrypt_with_padding( data.slice(idx, chunk_length), padding_length)} )
+      return Base64.encode64(padding_length.chr + (0...data.length).step(chunk_length).inject("") {|accum, idx| accum + encrypt_with_padding( data.slice(idx, chunk_length), padding_length)} )
     end
 
     def decrypt_with_padding(data, padding_length, key=nil)
@@ -110,11 +111,19 @@ module Sentry
       def encrypt_to_base64(data)
         self.new.encrypt_to_base64(data)
       end
+
+      def encrypt_large_to_base64(data)
+        self.new.encrypt_large_to_base64(data)
+      end
   
       def decrypt(data, key = nil)
         self.new.decrypt(data, key)
       end
   
+      def decrypt_large_from_base64(data, key = nil)
+         self.new.decrypt_large_from_base64(data, key)
+      end
+      
       def decrypt_from_base64(data, key = nil)
         self.new.decrypt_from_base64(data, key)
       end
@@ -156,6 +165,7 @@ module Sentry
       if @private_key_file and File.file?(@private_key_file)
         @private_key = File.open(@private_key_file) { |f| f.read }
       end
+      return @private_key
     end
   
     def load_public_key
