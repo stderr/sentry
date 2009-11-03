@@ -180,18 +180,18 @@ end
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
-    gemspec.name = "sentry"
-    gemspec.summary = "Asymmetric encryption of active record fields"
-    gemspec.description = "Asymmetric encryption of active record fields"
-    gemspec.email = "commoncode@pivotallabs.com"
-    gemspec.homepage = "http://github.com/pivotal/sentry"
-    gemspec.authors = ["John Pelly", "David Stevenson"]
-#    gemspec.rubyforge_project = 'loyal3-sentry'
+#    gemspec.name = "sentry"
+#    gemspec.summary = "Asymmetric encryption of active record fields"
+#    gemspec.description = "Asymmetric encryption of active record fields"
+#    gemspec.email = "commoncode@pivotallabs.com"
+#    gemspec.homepage = "http://github.com/pivotal/sentry"
+#    gemspec.authors = ["John Pelly", "David Stevenson"]
+    gemspec.rubyforge_project = 'loyal3-sentry'
   end
 
-#  Jeweler::RubyforgeTasks.new do |rubyforge|
-#    rubyforge.doc_task = "rdoc"
-#  end
+  Jeweler::RubyforgeTasks.new do |rubyforge|
+    rubyforge.doc_task = "rdoc"
+  end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end
