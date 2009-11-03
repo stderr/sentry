@@ -189,9 +189,9 @@ begin
 #    gemspec.rubyforge_project = 'loyal3-sentry'
   end
 
-  Jeweler::RubyforgeTasks.new do |rubyforge|
-    rubyforge.doc_task = "rdoc"
-  end
+#  Jeweler::RubyforgeTasks.new do |rubyforge|
+#    rubyforge.doc_task = "rdoc"
+#  end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end
