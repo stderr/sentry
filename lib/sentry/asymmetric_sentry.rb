@@ -25,6 +25,7 @@ module Sentry
     end
 
     def decrypt_large_from_base64(data, key=nil)
+      raise NoPrivateKeyError unless private?
       chunk_length = public_rsa.max_encryptable_length + 11 # 11 is magic padding for RSA encoding
       b64_decoded = Base64.decode64(data)
       padding_length = b64_decoded[0]
@@ -37,6 +38,7 @@ module Sentry
     end
     
     def encrypt_large_to_base64(data)
+      raise NoPublicKeyError unless public?
       padding_length = 8
       chunk_length = chunk_size(padding_length)
       return Base64.encode64(padding_length.chr + (0...data.length).step(chunk_length).inject("") {|accum, idx| accum + encrypt_with_padding( data.slice(idx, chunk_length), padding_length)} )
