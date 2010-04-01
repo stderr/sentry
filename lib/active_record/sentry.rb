@@ -8,12 +8,12 @@ module ActiveRecord # :nodoc:
       def generates_crypted(attr_name, options = {})
         mode = options[:mode] || :asymmetric
         case mode
-          #when :sha
-          #  generates_crypted_hash_of(attr_name)
+          when :sha
+            generates_crypted_hash_of(attr_name)
           when :asymmetric, :asymmetrical
             asymmetrically_encrypts(attr_name)
-          #when :symmetric, :symmetrical
-          #  symmetrically_encrypts(attr_name)
+          when :symmetric, :symmetrical
+            symmetrically_encrypts(attr_name)
         end
       end
 
@@ -64,31 +64,31 @@ module ActiveRecord # :nodoc:
 
       private
 
-      #def symmetrically_encrypts(attr_name)
-      #  temp_sentry = ::Sentry::SymmetricSentryCallback.new(attr_name)
-      #  before_validation temp_sentry
-      #  after_save temp_sentry
-      #
-      #  define_method(attr_name) do
-      #    send("#{attr_name}!") rescue nil
-      #  end
-      #
-      #  define_method("#{attr_name}!") do
-      #    return decrypted_values[attr_name] unless decrypted_values[attr_name].nil?
-      #    return nil if send("crypted_#{attr_name}").nil?
-      #    ::Sentry::SymmetricSentry.decrypt_from_base64(send("crypted_#{attr_name}"))
-      #  end
-      #
-      #  define_method("#{attr_name}=") do |value|
-      #    decrypted_values[attr_name] = value
-      #    nil
-      #  end
-      #
-      #  private
-      #  define_method(:decrypted_values) do
-      #    @decrypted_values ||= {}
-      #  end
-      #end
+      def symmetrically_encrypts(attr_name)
+        temp_sentry = ::Sentry::SymmetricSentryCallback.new(attr_name)
+        before_validation temp_sentry
+        after_save temp_sentry
+      
+       define_method(attr_name) do
+         send("#{attr_name}!") rescue nil
+       end
+      
+       define_method("#{attr_name}!") do
+         return decrypted_values[attr_name] unless decrypted_values[attr_name].nil?
+         return nil if send("crypted_#{attr_name}").nil?
+         ::Sentry::SymmetricSentry.decrypt_from_base64(send("crypted_#{attr_name}"))
+       end
+      
+       define_method("#{attr_name}=") do |value|
+         decrypted_values[attr_name] = value
+         nil
+       end
+      
+       private
+       define_method(:decrypted_values) do
+         @decrypted_values ||= {}
+       end
+      end
     end
 
     @@CHARS = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
