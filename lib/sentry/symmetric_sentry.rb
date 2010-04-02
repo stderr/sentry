@@ -1,21 +1,20 @@
 module Sentry
   class SymmetricSentry
     @@default_algorithm = 'DES-EDE3-CBC'
-    @@default_salt = "\0\0\0\0\0\0\0\0"
     @@default_key = nil
     attr_accessor :algorithm
     def initialize(options = {})
       @algorithm = options[:algorithm] || @@default_algorithm
-      @salt = options[:salt] || @@default_salt
     end
   
     def encrypt(data, key = nil)
       key = check_for_key!(key)
       des = encryptor
-      des.pkcs5_keyivgen(key, @salt)
       des.encrypt
-      data = des.update(data)
-      data << des.final
+      des.pkcs5_keyivgen(key)
+      cipher = des.update(data)
+      
+      cipher << des.final
     end
   
     def encrypt_to_base64(text, key = nil)
@@ -25,8 +24,8 @@ module Sentry
     def decrypt(data, key = nil)
       key = check_for_key!(key)
       des = encryptor
-      des.pkcs5_keyivgen(key, @salt)
       des.decrypt
+      des.pkcs5_keyivgen(key)
       text = des.update(data)
       text << des.final
     end

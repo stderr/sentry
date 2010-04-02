@@ -4,7 +4,7 @@ module Sentry
       @attr_name = attr_name
     end
   
-    Performs encryption on before_validation Active Record callback
+   # Performs encryption on before_validation Active Record callback
     def before_validation(model)
       return if model.send(@attr_name).blank?
       model.send("crypted_#{@attr_name}=", AsymmetricSentry.encrypt_to_base64(model.send(@attr_name)))
