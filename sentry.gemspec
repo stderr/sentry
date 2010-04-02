@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{sentry}
-  s.version = "0.5.3"
+  s.name = "stderr-sentry"
+  s.version = "0.5.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["John Pelly", "David Stevenson"]
-  s.date = %q{2009-11-02}
-  s.description = %q{Asymmetric encryption of active record fields}
-  s.email = %q{commoncode@pivotallabs.com}
+  s.authors = ["Josh Fenio"]
+  s.date = %q{2010-04-02}
+  s.description = %q{Asymmetric / Symmetric encryption of active record fields}
+  s.email = %q{stderr@truedat.org}
   s.extra_rdoc_files = [
     "README"
   ]
